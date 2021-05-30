@@ -29,6 +29,6 @@ void loop(){
 void callbackMqtt(char* topic, byte* message, unsigned int lenght){
   Serial.println("Data Received");
   switch(topic){
-    
+    case()
   }
 }
