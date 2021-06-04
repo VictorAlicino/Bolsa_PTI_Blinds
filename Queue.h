@@ -6,9 +6,17 @@ class Queue_Node{
 private:
     T message;
     Queue_Node *next;
+
 public:
-    Queue_Node(T msg);
-    template <class T> T getMessage();
+    Queue_Node(T msg){
+        this->message = msg;
+        this->next = nullptr;
+    }
+
+    T get_message(){
+        return message;
+    }
+
     ~Queue_Node();
 };
 
@@ -18,15 +26,24 @@ private:
     T messages;
     Queue_Node<T> queue;
     Queue_Node<T> *queue_back;
+
 public:
-    Queue();
+    Queue(){
+        queue = nullptr;
+        queue_back = nullptr;
+    }
+
     ~Queue();
-    bool empty();
+    bool is_empty(){
+        return (queue == nullptr);
+    }
+
+    void push(T msg);
+    void pop();
     int size();
     T front();
     T back();
-    void push(T msg);
-    void pop();
+    
 };
 
 #endif
