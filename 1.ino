@@ -44,14 +44,21 @@ int encoderPosition = 0;
 void setup(){
 	//Inicializações
 	Serial.begin(115200); 		//Serial
-	EEPROM.begin(savesNumber); 	//EEPROM
-
+	flash.begin("net-cred"); 	//EEPROM
+	
+	String ssid = getString("ssid", "");
+	if(ssid == ""){
+		//Iniciar WebServer\
+	}
+	String pass = getString("ssid", "");
+	flash.end();
+	
     //Iniciando WiFi
 	WiFi.hostname("Smart-PTI Blinds Controller");
-	WiFiMulti.addAP(SSID_NAME, WIFI_PASSWORD); //Adiciona um ponto de conexão para o ESP
+	WiFiMulti.addAP(ssid.c_str(), pass.c_str()); //Adiciona um ponto de conexão para o ESP
 	Serial.println();
 	Serial.print("WiFi - Connected to: ");
-	Serial.println(SSID_NAME);  
+	Serial.println(ssid);  
 
 	//Aguarda por conexão WiFi
 	while(WiFiMulti.run() != WL_CONNECTED) {
