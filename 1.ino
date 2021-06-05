@@ -6,11 +6,11 @@
 #include <EEPROM.h>
 
 //Pinos dos Dispotivos
-#define BUTTON_01	2 
-#define BUTTON_02   3
-#define BUTTON_03   4
-#define pHa 		18
-#define pHb 		19
+#define BUTTON_01	  2 
+#define BUTTON_02	  3
+#define BUTTON_03  	4
+#define pHa 		    18
+#define pHb 		    19
 //Fim da definição de pinos
 
 //Configurações
