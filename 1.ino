@@ -4,6 +4,7 @@
 #include <ArduinoOTA.h>
 #include <RotaryEncoder.h>
 #include <EEPROM.h>
+#include <Preferences.h>
 
 //Pinos dos Dispotivos
 #define BUTTON_01	2 
@@ -35,6 +36,7 @@ void callbackMqtt(char* topic, byte* message, unsigned int lenght);
 PubSubClient mqttClient(DEFAULT_BROKER_IP, DEFAULT_BROKER_PORT, callbackMqtt, wifiClient);
 RotaryEncoder encoder(32, 33);
 WiFiClient client;
+Preferences flash;
 
 int encoderPosition = 0;
 //Fim das variáveis globais
