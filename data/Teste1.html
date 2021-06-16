@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Blinds</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <div align="center"> 
+    <h1>Configuração</h1>
+    <h3>Persiana Inteligente</h3>
+    <h4>Digite as configurações abaixo:</h4>
+    <form action="/get">
+      <label for="fname">SSID:</label><br>
+      <input type="text" name="input1" maxlength="15" size="15"><br>
+      <label for="fname">PASSWORD:</label><br>
+      <input type="password" name="input2" maxlength="64" size="15"><br>
+      <label for="fname">BROKER IP:</label><br>
+      <input type="text" name="input3" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"><br>
+      <label for="fname">BROKER PASSWORD:</label><br>
+      <input type="password" name="input4" size="15"><br>
+      <input type="submit" value="Definir">
+    </form><br>
+  </div>
+</body>
+</html>

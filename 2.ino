@@ -1,9 +1,9 @@
 #include <WiFi.h>
 #include <ArduinoOTA.h>
 #include <RotaryEncoder.h>
-#include <EEPROM.h>
 #include <Preferences.h>
 #include <PubSubClient.h>
+#include <ESPAsyncWebServer.h>
 
 //Pinos dos Dispotivos
 #define BUTTON_01 2 
@@ -29,8 +29,12 @@ void setup(){
 	Serial.begin(115200); 	//Serial
 
     flash.begin("config");
-    bool first_boot = getBool("first_boot", true);
+    bool first_boot = flash.getBool("first_boot", true);
     if(first_boot){
+        String ssid, pass;
+        Serial.println("Entering Web Server Configuration Mode");
+        AsyncWebServer server = startup_server();
+
         
     }
 }

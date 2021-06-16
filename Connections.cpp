@@ -20,6 +20,7 @@ void wifi_connect(String ssid, String password){
             unsigned long now_time = millis();
             while((start_time - now_time) != 1000){
                 Serial.print(".");
+                now_time = millis();
             }
             Serial.println("Connection Failed!");
             Serial.println("Retrying...");
@@ -42,4 +43,3 @@ IPAddress activate_internal_wifi(){
     Serial.println(IP);
     return IP;
 }
-
