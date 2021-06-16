@@ -1,13 +1,21 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
-void wifi_connect(String ssid = nullptr, String password = nullptr){
-    try:
+struct networkConnectionError: public std::exception
+{
+	const char * what () const throw ()
+    {
+    	return "Network Connection Error";
+    }
+};
+
+void wifi_connect(String ssid, String password){
+    try{
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid.c_str(), password.c_str());
 
         Serial.println("Connecting to WIFI...");
-        for(counter = 0; WiFi.status() != WL_CONNECTED || counter < 10; counter++){
+        for(int counter = 0; WiFi.status() != WL_CONNECTED || counter < 10; counter++){
             unsigned long start_time = millis();
             unsigned long now_time = millis();
             while((start_time - now_time) != 1000){
@@ -16,21 +24,22 @@ void wifi_connect(String ssid = nullptr, String password = nullptr){
             Serial.println("Connection Failed!");
             Serial.println("Retrying...");
         }
-        if(Wifi.status() != WL_CONNECTED){
+        if(WiFi.status() != WL_CONNECTED){
             Serial.println("Connection failed after 10 retries.");
-            throw networkConnectionError;
+            throw networkConnectionError();
         }else{
             Serial.println("Connected.");
         }
-    catch(networkConnectionError){
+    }catch(std::exception& e){
         throw;
     }
 }
 
 IPAddress activate_internal_wifi(){
-    WiFi.softAP(ssid = "Persiana Inteligente (0001)", max_connection = 1);
+    WiFi.softAP("Persiana Inteligente (0001)", NULL, NULL, 0, 1);
     IPAddress IP = WiFi.softAPIP();
     Serial.print("Configuration Access Point set on ");
     Serial.println(IP);
     return IP;
 }
+
