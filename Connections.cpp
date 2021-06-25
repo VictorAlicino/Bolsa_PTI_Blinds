@@ -1,13 +1,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
-
-struct networkConnectionError: public std::exception
-{
-	const char * what () const throw ()
-    {
-    	return "Network Connection Error";
-    }
-};
+#include "Connections.h"
+#include "WebServers.h"
 
 void wifi_connect(String ssid, String password){
     try{

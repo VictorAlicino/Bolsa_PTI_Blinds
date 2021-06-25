@@ -4,6 +4,8 @@
 #include <Preferences.h>
 #include <PubSubClient.h>
 #include <ESPAsyncWebServer.h>
+#include "WebServers.h"
+#include "Connections.h"
 
 //Pinos dos Dispotivos
 #define BUTTON_01 2 
@@ -30,12 +32,12 @@ void setup(){
 
     flash.begin("config");
     bool first_boot = flash.getBool("first_boot", true);
-    if(first_boot){
+    if(first_boot == true){
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server();
 
-        
+
     }
 }
 

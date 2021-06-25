@@ -1,11 +1,13 @@
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
+#include "WebServers.h"
+#include "Connections.h"
 
 // Replaces placeholder with LED state value
 String processor(const String& var){
 }
 
-AsyncWebServer startup_server(String ssid, String password){
+AsyncWebServer startup_server(){
     AsyncWebServer server(80);
 
     if(!SPIFFS.begin(true)){
@@ -16,11 +18,6 @@ AsyncWebServer startup_server(String ssid, String password){
     String wifi_pass;
     String broker_ip;
     String broker_password;
-
-    const char* PARAM_INPUT_1 = "input1";
-    const char* PARAM_INPUT_2 = "input2";
-    const char* PARAM_INPUT_3 = "input3";
-    const char* PARAM_INPUT_4 = "input4";
 
     // Route for root / web page
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -33,19 +30,19 @@ AsyncWebServer startup_server(String ssid, String password){
     });
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
-    server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
+    server.on("/get", HTTP_GET, [&wifi_ssid, &wifi_pass, &broker_ip, &broker_password] (AsyncWebServerRequest *request) {
       // GET input1 value on <ESP_IP>/get?input1=<inputMessage>
-      if (request->hasParam(PARAM_INPUT_1)) {
-        &wifi_ssid = request->getParam(PARAM_INPUT_1)->value();
+      if (request->hasParam("input1")) {
+        wifi_ssid = request->getParam("input1")->value();
       }
-      else if (request->hasParam(PARAM_INPUT_2)) {
-        &wifi_pass = request->getParam(PARAM_INPUT_2)->value();
+      else if (request->hasParam("input2")) {
+        wifi_pass = request->getParam("input2")->value();
       }
-      else if (request->hasParam(PARAM_INPUT_3)) {
-        &broker_ip = request->getParam(PARAM_INPUT_3)->value();
+      else if (request->hasParam("input3")) {
+        broker_ip = request->getParam("input3")->value();
       }
-      else if (request->hasParam(PARAM_INPUT_4)) {
-        &broker_password = request->getParam(PARAM_INPUT_4)->value();
+      else if (request->hasParam("input4")) {
+        broker_password = request->getParam("input4")->value();
       }
       else {
         request->send(SPIFFS, "/Teste1.html", String(), false, processor);
