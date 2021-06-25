@@ -37,3 +37,10 @@ IPAddress activate_internal_wifi(){
     Serial.println(IP);
     return IP;
 }
+
+void callbackMqtt(char* topic, byte* message, unsigned lenght){
+	Serial.println("\nData Received");
+	
+	if(!strcmp(topic, "topic")){
+	}
+}
