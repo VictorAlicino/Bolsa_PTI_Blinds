@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
+#include <PubSubClient.h>
 #include "Connections.h"
 #include "WebServers.h"
 
@@ -21,12 +22,13 @@ void wifi_connect(String ssid, String password){
         }
         if(WiFi.status() != WL_CONNECTED){
             Serial.println("Connection failed after 10 retries.");
-            throw networkConnectionError();
+            throw network_connection_error();
         }else{
             Serial.println("Connected.");
         }
     }catch(std::exception& e){
-        throw;
+        Serial.println("Network Connection Error -> Throwing Exception.");
+        throw e;
     }
 }
 
@@ -38,7 +40,27 @@ IPAddress activate_internal_wifi(){
     return IP;
 }
 
-void callbackMqtt(char* topic, byte* message, unsigned lenght){
+bool mqtt_connect(PubSubClient mqttClient, String server, int port){
+    try{
+        mqttClient.setServer(server.c_str(), port);
+
+        if(mqttClient.connected() != true){
+            throw mqtt_connection_error();
+        }
+        
+        WiFiClient client;
+        mqttClient.connect("persiana01");
+        mqttClient.setCallback(&mqtt_callback);
+        mqttClient.setClient(client);
+
+    }
+    catch(std::exception& e){
+        Serial.println("MQTT Connection Error -> Throwing Exception.");
+        throw e;
+    }
+}
+
+void mqtt_callback(char* topic, byte* message, unsigned lenght){
 	Serial.println("\nData Received");
 	
 	if(!strcmp(topic, "topic")){

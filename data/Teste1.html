@@ -13,13 +13,13 @@
     <h4>Digite as configurações abaixo:</h4>
     <form action="/get">
       <label for="fname">SSID:</label><br>
-      <input type="text" name="input1" maxlength="15" size="15"><br>
+      <input type="text" name="wifi_ssid" maxlength="15" size="15"><br>
       <label for="fname">PASSWORD:</label><br>
-      <input type="password" name="input2" maxlength="64" size="15"><br>
+      <input type="password" name="wifi_password" maxlength="64" size="15"><br>
       <label for="fname">BROKER IP:</label><br>
-      <input type="text" name="input3" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"><br>
+      <input type="text" name="mqtt_ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"><br>
       <label for="fname">BROKER PASSWORD:</label><br>
-      <input type="password" name="input4" size="15"><br>
+      <input type="password" name="mqtt_password" size="15"><br>
       <input type="submit" value="Definir">
     </form><br>
   </div>
