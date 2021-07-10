@@ -4,11 +4,13 @@
 #include "WebServers.h"
 #include "Connections.h"
 
+extern PubSubClient mqttClient;
+
 // Replaces placeholder with LED state value
 String processor(const String& var){
 }
 
-AsyncWebServer startup_server(PubSubClient mqttClient){
+AsyncWebServer startup_server(){
     AsyncWebServer server(80);
 
     if(!SPIFFS.begin(true)){

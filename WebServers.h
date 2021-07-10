@@ -6,6 +6,6 @@
 
 String processor(const String& var);
 
-AsyncWebServer startup_server(PubSubClient mqttClient);
+AsyncWebServer startup_server();
 
 #endif

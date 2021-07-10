@@ -4,6 +4,8 @@
 #include "Connections.h"
 #include "WebServers.h"
 
+extern String device_name;
+
 void wifi_connect(String ssid, String password){
     try{
         WiFi.mode(WIFI_STA);
@@ -33,6 +35,8 @@ void wifi_connect(String ssid, String password){
 }
 
 IPAddress activate_internal_wifi(){
+    String name = "Persiana Inteligente ";
+    name.concat(device_name);
     WiFi.softAP("Persiana Inteligente (0001)", NULL, NULL, 0, 1);
     IPAddress IP = WiFi.softAPIP();
     Serial.print("Configuration Access Point set on ");

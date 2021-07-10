@@ -43,9 +43,7 @@ void setup(){
 
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
-        AsyncWebServer server = startup_server(mqttClient);
-
-
+        AsyncWebServer server = startup_server();
     }
 }
 
