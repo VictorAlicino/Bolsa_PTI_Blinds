@@ -26,4 +26,8 @@ bool mqtt_connect(PubSubClient mqttClient, String server, int port);
 
 IPAddress activate_internal_wifi();
 
+void mqtt_callback(char* topic, byte* message, unsigned lenght);
+
+String get_mac_address();
+
 #endif

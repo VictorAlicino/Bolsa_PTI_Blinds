@@ -6,6 +6,7 @@
 #include <ESPAsyncWebServer.h>
 #include "WebServers.h"
 #include "Connections.h"
+#include "Hardware.h"
 
 //Pinos dos Dispotivos
 #define BUTTON_01 2 
@@ -24,6 +25,7 @@
 PubSubClient mqttClient;
 RotaryEncoder encoder(32, 33);
 Preferences flash;
+String device_name;
 //Fim das Variáveis Globais
 
 void setup(){
@@ -35,6 +37,10 @@ void setup(){
     //Em caso de ser o primeiro boot, a placa entrará em modo de configuração inicial
     bool first_boot = flash.getBool("first_boot", true);
     if(first_boot == true){
+        //Definindo o nome
+        device_name = get_device_name();
+        flash.putString("device_name", device_name); 
+
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server(mqttClient);
