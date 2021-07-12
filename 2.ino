@@ -41,6 +41,7 @@ void setup(){
         device_name = get_device_name();
         flash.putString("device_name", device_name); 
 
+        //Ativando Web Server
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server();
