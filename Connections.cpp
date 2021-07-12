@@ -53,7 +53,7 @@ bool mqtt_connect(PubSubClient mqttClient, String server, int port){
         }
         
         WiFiClient client;
-        mqttClient.connect("persiana01");
+        mqttClient.connect("0001");
         mqttClient.setCallback(mqtt_callback);
         mqttClient.setClient(client);
 
@@ -64,10 +64,28 @@ bool mqtt_connect(PubSubClient mqttClient, String server, int port){
     }
 }
 
-void mqtt_callback(char* topic, byte* message, unsigned lenght){
+void mqtt_callback(char* topic, byte* message, unsigned length){
 	Serial.println("\nData Received");
 	
-	if(!strcmp(topic, "topic")){
+	if(!strcmp(topic, "0001")){
+        char buffer[length + 1];
+        for(int i = 0; i < length; i++) {
+            buffer[i] = message[i];
+        }
+        buffer[length] = '\0';
+
+        if (strcmp(buffer, "0001") == 0) {
+            Serial.println("Abrindo Persiana");
+            //TODO
+        }else if (strcmp(buffer, "0002") == 0) {
+            Serial.println("Fechando Persiana");
+            //TODO
+        }else if (strcmp(buffer, "0003") == 0){
+            Serial.println("Parando Imediatamente");
+            digitalWrite(2, LOW);
+        }else{
+            Serial.println("Não foi possível processar a mensagem");
+        }
 	}
 }
 
