@@ -1,6 +1,7 @@
 {
     "configuration": "FlashFreq=80,UploadSpeed=921600,DebugLevel=none",
     "board": "esp32:esp32:esp32doit-devkit-v1",
-    "sketch": "2.ino",
-    "output": "./ArduinoOutput"
+    "sketch": "Bolsa_PTI_Blinds.ino",
+    "output": "./ArduinoOutput",
+    "port": "COM3"
 }

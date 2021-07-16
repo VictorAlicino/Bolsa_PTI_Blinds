@@ -4,25 +4,25 @@
 #include "WebServers.h"
 #include "Connections.h"
 
-extern PubSubClient mqttClient;
-
 // Replaces placeholder with LED state value
 String processor(const String& var){
 }
 
 AsyncWebServer startup_server(){
     AsyncWebServer server(80);
-
-    if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    }
+	
+	try{
+    	SPIFFS.begin(true);
+	}catch(...){
+		Serial.println("!!! Exception during SPIFFS Mounting !!!");
+	}
 
     String wifi_ssid;
     String wifi_pass;
     String server_ip;
     String server_password;
-	  String server_port;
-
+	String server_port;
+	
     // Route for root / web page
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(SPIFFS, "/Teste1.html", String(), false, processor);
@@ -34,7 +34,7 @@ AsyncWebServer startup_server(){
     });
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
-    server.on("/get", HTTP_GET, [&wifi_ssid, &wifi_pass, &server_ip, &server_password, mqttClient, &server_port] (AsyncWebServerRequest *request) {
+    server.on("/get", HTTP_GET, [&wifi_ssid, &wifi_pass, &server_ip, &server_password, &server_port] (AsyncWebServerRequest *request) {
       if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password")){
 		wifi_ssid = request->getParam("wifi_ssid")->value();
 		wifi_pass = request->getParam("wifi_password")->value();
@@ -51,10 +51,11 @@ AsyncWebServer startup_server(){
 		server_port = request->getParam("mqtt_port")->value();
 		int port = server_port.toInt();
 
-		mqtt_connect(mqttClient, server_ip, port);
+		mqtt_connect(server_ip, port);
 	  }
 	  else {
         request->send(SPIFFS, "/Teste1.html", String(), false, processor);
       }
     });
+	return server;
 }

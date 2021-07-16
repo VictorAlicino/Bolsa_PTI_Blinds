@@ -7,6 +7,7 @@
 
 extern String device_name;
 extern Preferences flash;
+extern PubSubClient mqttClient;
 
 void wifi_connect(String ssid, String password){
     try{
@@ -40,16 +41,19 @@ void wifi_connect(String ssid, String password){
 }
 
 IPAddress activate_internal_wifi(){
+    Serial.println("Initializing Internal Wireless Netowrk");
     String name = "Persiana Inteligente ";
     name.concat(device_name);
-    WiFi.softAP("Persiana Inteligente (0001)", NULL, NULL, 0, 1);
+    WiFi.softAP(name.c_str(), NULL, NULL, 0, 1);
     IPAddress IP = WiFi.softAPIP();
+    WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+    WiFi.setHostname(name.c_str());
     Serial.print("Configuration Access Point set on ");
     Serial.println(IP);
     return IP;
 }
 
-bool mqtt_connect(PubSubClient mqttClient, String server, int port){
+bool mqtt_connect(String server, int port){
     try{
         mqttClient.setServer(server.c_str(), port);
 

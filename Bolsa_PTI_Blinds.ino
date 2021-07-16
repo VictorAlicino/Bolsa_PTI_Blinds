@@ -37,15 +37,16 @@ void setup(){
     if(first_boot == true){
         //Definindo o nome
         device_name = get_device_name();
-        flash.putString("device_name", device_name); 
+        flash.putString("device_name", device_name);
+        Serial.printf("Device Name: %s\n", device_name);
 
         //Ativando Web Server
+        IPAddress ip = activate_internal_wifi();
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server();
         
         //Ativando Bluetooth
-        
     }
 }
 

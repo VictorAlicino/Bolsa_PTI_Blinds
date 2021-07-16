@@ -22,7 +22,7 @@ struct mqtt_connection_error: public std::exception
 
 void wifi_connect(String ssid, String password);
 
-bool mqtt_connect(PubSubClient mqttClient, String server, int port);
+bool mqtt_connect(String server, int port);
 
 IPAddress activate_internal_wifi();
 
