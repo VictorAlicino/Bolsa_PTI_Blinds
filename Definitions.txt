@@ -1,0 +1,14 @@
+Definições de Mensagens do MQTT:
+
+Persianas Inteligentes:
+    Tópico: 0001
+    Comandos:
+        Abrir:
+            0001
+        Fechar:
+            0002
+        Parar:
+            0003
+    Persianas:
+        Persiana 01 -> UUID: 2eff5022-d884-4a65-b282-80f20368b324
+        Persiana 02 -> UUID: 851633b9-b6e5-4842-87d3-06708f6c8d54
