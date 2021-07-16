@@ -1,10 +1,12 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
+#include <Preferences.h>
 #include "Connections.h"
 #include "WebServers.h"
 
 extern String device_name;
+extern Preferences flash;
 
 void wifi_connect(String ssid, String password){
     try{
@@ -27,6 +29,9 @@ void wifi_connect(String ssid, String password){
             throw network_connection_error();
         }else{
             Serial.println("Connected.");
+            flash.putString("wifi_ssid", ssid);
+            flash.putString("wifi_password", password);
+            Serial.println("WiFi Credentials has been written in memory");
         }
     }catch(std::exception& e){
         Serial.println("Network Connection Error -> Throwing Exception.");

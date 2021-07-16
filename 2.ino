@@ -1,5 +1,3 @@
-#include <WiFi.h>
-#include <ArduinoOTA.h>
 #include <RotaryEncoder.h>
 #include <Preferences.h>
 #include <PubSubClient.h>
@@ -45,6 +43,9 @@ void setup(){
         String ssid, pass;
         Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server();
+        
+        //Ativando Bluetooth
+        
     }
 }
 

@@ -41,6 +41,7 @@ AsyncWebServer startup_server(){
 
 		try{
 			wifi_connect(wifi_ssid, wifi_pass);
+			
 		}catch(...){
 			request->send(SPIFFS, "/Teste1.html", String(), false, processor);
 		}
