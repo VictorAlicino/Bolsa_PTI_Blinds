@@ -18,7 +18,7 @@
 //Configurações
 #define ACTIVATED LOW
 #define DEACTIVATED HIGH
-//Fim das configurações
+ //Fim das configurações
 
 //Variáveis Globais
 PubSubClient mqttClient;
@@ -29,7 +29,7 @@ Preferences flash;
 void setup(){
     //Inicializações
 	Serial.begin(115200); 	//Serial
-
+ 
     flash.begin("config");
     bool first_boot = flash.getBool("first_boot", true);
     if(first_boot == true){
