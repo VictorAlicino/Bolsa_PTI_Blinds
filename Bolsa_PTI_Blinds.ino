@@ -28,13 +28,16 @@ String device_name;
 
 void setup(){
     //Inicializações
-	Serial.begin(115200); 	//Serial
+	Serial.begin(115200); Serial.println();
 
     //Carregar linhas de configurações
     flash.begin("config");
+
     //Em caso de ser o primeiro boot, a placa entrará em modo de configuração inicial
     bool first_boot = flash.getBool("first_boot", true);
     if(first_boot == true){
+        Serial.println("This device is not configured yet");
+        
         //Definindo o nome
         device_name = get_device_name();
         flash.putString("device_name", device_name);
@@ -42,9 +45,9 @@ void setup(){
 
         //Ativando Web Server
         IPAddress ip = activate_internal_wifi();
-        String ssid, pass;
-        Serial.println("Entering Web Server Configuration Mode");
         AsyncWebServer server = startup_server();
+
+        while(true){}
         
         //Ativando Bluetooth
     }

@@ -13,28 +13,42 @@ void wifi_connect(String ssid, String password){
     try{
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid.c_str(), password.c_str());
+        Serial.println("Connecting to WIFI");
 
-        Serial.println("Connecting to WIFI...");
-        for(int counter = 0; WiFi.status() != WL_CONNECTED || counter < 10; counter++){
-            unsigned long start_time = millis();
-            unsigned long now_time = millis();
-            while((start_time - now_time) != 1000){
-                Serial.print(".");
+        //Aguardando a primeira tentativa de conexão
+        unsigned long start_time = millis();
+        unsigned long now_time = millis();
+        while((now_time - start_time) != 5000){
+                now_time = millis();
+        }
+
+        //Realizando mais tentativas 
+        int attemps = 5;
+        for(int counter = 0; WiFi.status() != WL_CONNECTED && counter < attemps; counter++){
+            start_time = millis();
+            now_time = millis();
+            while((now_time - start_time) != 5000){
                 now_time = millis();
             }
-            Serial.println("Connection Failed!");
+            Serial.print("└───");
+            Serial.printf("Connection Failed! %d Attemps remaining!\n", attemps - counter);
+            Serial.print("└───");
             Serial.println("Retrying...");
         }
         if(WiFi.status() != WL_CONNECTED){
-            Serial.println("Connection failed after 10 retries.");
+            Serial.print("└───");
+            Serial.println("Connection failed after 10 attemps.");
             throw network_connection_error();
         }else{
+            Serial.print("└───");
             Serial.println("Connected.");
-            flash.putString("wifi_ssid", ssid);
-            flash.putString("wifi_password", password);
+            //flash.putString("wifi_ssid", ssid);
+            //flash.putString("wifi_password", password);
+            Serial.print("    └───");
             Serial.println("WiFi Credentials has been written in memory");
         }
     }catch(std::exception& e){
+        Serial.print("└───");
         Serial.println("Network Connection Error -> Throwing Exception.");
         throw e;
     }
@@ -43,11 +57,12 @@ void wifi_connect(String ssid, String password){
 IPAddress activate_internal_wifi(){
     Serial.println("Initializing Internal Wireless Netowrk");
     String name = "Persiana Inteligente ";
-    name.concat(device_name);
-    WiFi.softAP(name.c_str(), NULL, NULL, 0, 1);
+    name = name + "(" + device_name + ")";
+    WiFi.softAP(name.c_str(), NULL);
     IPAddress IP = WiFi.softAPIP();
     WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
     WiFi.setHostname(name.c_str());
+    Serial.print("└───");
     Serial.print("Configuration Access Point set on ");
     Serial.println(IP);
     return IP;
