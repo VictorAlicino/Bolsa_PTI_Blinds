@@ -18,12 +18,6 @@ AsyncWebServer startup_server(){
     	Serial.println("An Error has occurred while mounting SPIFFS");
   	}
 
-    String wifi_ssid;
-    String wifi_pass;
-    String server_ip;
-    String server_password;
-	String server_port;
-
     // Route for root / web page
   	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
   		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
@@ -35,31 +29,41 @@ AsyncWebServer startup_server(){
     });
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
-    server.on("/get", HTTP_GET, [&wifi_ssid, &wifi_pass, &server_ip, &server_password, &server_port] (AsyncWebServerRequest *request) {
-    	if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password")){
+    server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
+		String wifi_ssid;
+    	String wifi_pass;
+    	String server_ip;
+		int server_port;
+
+		if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password") &&
+			request->hasParam("mqtt_ip") && request->hasParam("mqtt_port")){
 			wifi_ssid = request->getParam("wifi_ssid")->value();
 			wifi_pass = request->getParam("wifi_password")->value();
+			server_ip = request->getParam("mqtt_ip")->value();
+			server_port = (request->getParam("mqtt_port")->value()).toInt();
 
 			try{
+        		const TickType_t xDelay = 5000 / portTICK_PERIOD_MS;
+				vTaskDelay(xDelay);
 				wifi_connect(wifi_ssid, wifi_pass);
+
+				mqtt_connect(server_ip, server_port);
+				request->send(202, "text/plain", "Connected");
 
 			}catch(...){
 				request->send(SPIFFS, "/Teste1.html", String(), false, processor);
 			}
     	}
-		else if(request->hasParam("mqtt_ip") && request->hasParam("mqtt_port")){  
-			server_ip = request->getParam("mqtt_ip")->value();
-			server_port = request->getParam("mqtt_port")->value();
-			int port = server_port.toInt();
-
-			mqtt_connect(server_ip, port);
-		}
 		else {
     		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
     	}
     });
 
+	server.onNotFound([](AsyncWebServerRequest *request){
+    	request->send(404, "text/plain", "Not found");
+    });
 	
+
 	server.begin();
 	Serial.print("└───");
 	Serial.println("Web Server successfully activated");

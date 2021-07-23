@@ -14,22 +14,15 @@ void wifi_connect(String ssid, String password){
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid.c_str(), password.c_str());
         Serial.println("Connecting to WIFI");
+        const TickType_t xDelay = 5000 / portTICK_PERIOD_MS;
 
         //Aguardando a primeira tentativa de conexão
-        unsigned long start_time = millis();
-        unsigned long now_time = millis();
-        while((now_time - start_time) != 5000){
-                now_time = millis();
-        }
+        vTaskDelay(xDelay);
 
         //Realizando mais tentativas 
         int attemps = 5;
-        for(int counter = 0; WiFi.status() != WL_CONNECTED && counter < attemps; counter++){
-            start_time = millis();
-            now_time = millis();
-            while((now_time - start_time) != 5000){
-                now_time = millis();
-            }
+        for(int counter = 0; WiFi.status() == WL_CONNECTED && counter < attemps; counter++){
+            vTaskDelay(xDelay);
             Serial.print("└───");
             Serial.printf("Connection Failed! %d Attemps remaining!\n", attemps - counter);
             Serial.print("└───");
