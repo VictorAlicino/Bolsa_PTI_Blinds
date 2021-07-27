@@ -51,6 +51,7 @@ IPAddress activate_internal_wifi(){
     name = name + "(" + device_name + ")";
     WiFi.softAP(name.c_str(), NULL);
     IPAddress IP = WiFi.softAPIP();
+    dnsServer.start(53, "*", IP);
     ESP_LOGD(TAG, "Starting DNS Server");
     WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
     WiFi.setHostname(name.c_str());

@@ -48,8 +48,7 @@ void setup(){
         
 
         //Ativando Web Server
-        IPAddress ip = activate_internal_wifi();
-        dnsServer.start(53, "*", WiFi.softAPIP());
+        IPAddress IP = activate_internal_wifi();
         AsyncWebServer server = startup_server();
 
         while(true){
