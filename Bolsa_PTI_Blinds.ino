@@ -2,6 +2,7 @@
 #include <Preferences.h>
 #include <PubSubClient.h>
 #include <ESPAsyncWebServer.h>
+#include <DNSServer.h>
 #include "WebServers.h"
 #include "Connections.h"
 #include "Hardware.h"
@@ -24,6 +25,8 @@ PubSubClient mqttClient;
 RotaryEncoder encoder(32, 33);
 Preferences flash;
 String device_name;
+DNSServer dnsServer;
+static const char* TAG = "Main";
 //Fim das Variáveis Globais
 
 void setup(){
@@ -36,18 +39,22 @@ void setup(){
     //Em caso de ser o primeiro boot, a placa entrará em modo de configuração inicial
     bool first_boot = flash.getBool("first_boot", true);
     if(first_boot == true){
-        Serial.println("This device is not configured yet");
+        ESP_LOGD(TAG, "This device is not configured yet");
         
         //Definindo o nome
         device_name = get_device_name();
         flash.putString("device_name", device_name);
-        Serial.printf("Device Name: %s\n", device_name);
+        ESP_LOGD(TAG, "Device Name: %s", device_name);
+        
 
         //Ativando Web Server
         IPAddress ip = activate_internal_wifi();
+        dnsServer.start(53, "*", WiFi.softAPIP());
         AsyncWebServer server = startup_server();
 
-        while(true){}
+        while(true){
+            dnsServer.processNextRequest();
+        }
         
         //Ativando Bluetooth
     }

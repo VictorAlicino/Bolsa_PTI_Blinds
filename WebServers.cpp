@@ -5,22 +5,39 @@
 #include "WebServers.h"
 #include "Connections.h"
 
+static const char* TAG = "WebServers";
+
+class CaptiveRequestHandler : public AsyncWebHandler {
+public:
+  CaptiveRequestHandler() {}
+  virtual ~CaptiveRequestHandler() {}
+
+  bool canHandle(AsyncWebServerRequest *request){
+    //request->addInterestingHeader("ANY");
+    return true;
+  }
+
+  void handleRequest(AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/Teste1.html", String(), false, processor);
+  }
+};
+
 // Replaces placeholder with LED state value
 String processor(const String& var){
 }
 
 AsyncWebServer startup_server(){
-	Serial.println("Entering Web Server Configuration Mode");
+	ESP_LOGD(TAG, "Entering Web Server Configuration Mode");
     AsyncWebServer server(80);
 	
 	if(!SPIFFS.begin(true)){
-		Serial.print("└───");
-    	Serial.println("An Error has occurred while mounting SPIFFS");
+		ESP_LOGE(TAG, "An Error has occurred while mounting SPIFFS");
   	}
 
     // Route for root / web page
   	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
   		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
+		ESP_LOGI(TAG, "A Client has been Connected");
   	});
 
     // Route to load style.css file
@@ -63,10 +80,9 @@ AsyncWebServer startup_server(){
     	request->send(404, "text/plain", "Not found");
     });
 	
-
+	server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
 	server.begin();
-	Serial.print("└───");
-	Serial.println("Web Server successfully activated");
+	ESP_LOGD(TAG, "Web Server successfully activated");
 
 	return server;
 }
