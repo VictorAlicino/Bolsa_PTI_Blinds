@@ -5,11 +5,13 @@
 #include <DNSServer.h>
 #include "Connections.h"
 #include "WebServers.h"
+#include "Hardware.h"
 
 extern String device_name;
 extern Preferences flash;
 extern PubSubClient mqttClient;
 extern DNSServer dnsServer;
+extern int WIFI_CONNECTION_STATUS;
 static const char* TAG = "Connections";
 
 void wifi_connect(String ssid, String password){
@@ -17,15 +19,15 @@ void wifi_connect(String ssid, String password){
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid.c_str(), password.c_str());
         ESP_LOGD(TAG, "Connecting to WiFi");
-        const TickType_t xDelay = 5000 / portTICK_PERIOD_MS;
+        const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
 
         //Aguardando a primeira tentativa de conexão
-        vTaskDelay(xDelay);
+        vTaskDelay(xDelay*5);
 
         //Realizando mais tentativas 
         int attemps = 5;
         for(int counter = 0; WiFi.status() == WL_CONNECTED && counter < attemps; counter++){
-            vTaskDelay(xDelay);
+            vTaskDelay(xDelay*10);
             ESP_LOGE(TAG, "Connection Failed! %d Attemps remaining!", attemps - counter);
             ESP_LOGD(TAG, "Retrying...");
         }
@@ -33,6 +35,7 @@ void wifi_connect(String ssid, String password){
             ESP_LOGE(TAG, "Connection failed after 10 attemps.");
             throw network_connection_error();
         }else{
+            WIFI_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "Connected");
             //flash.putString("wifi_ssid", ssid);
             //flash.putString("wifi_password", password);

@@ -26,8 +26,15 @@ RotaryEncoder encoder(32, 33);
 Preferences flash;
 String device_name;
 DNSServer dnsServer;
+String ssid;
+String pass;
 static const char* TAG = "Main";
 //Fim das Variáveis Globais
+
+//FLAGS Globais
+int WIFI_CONNECTION_STATUS;
+//Fim das FLAGS Globais
+
 
 void setup(){
     //Inicializações
@@ -40,6 +47,7 @@ void setup(){
     bool first_boot = flash.getBool("first_boot", true);
     if(first_boot == true){
         ESP_LOGD(TAG, "This device is not configured yet");
+        WIFI_CONNECTION_STATUS = NOT_READY;
         
         //Definindo o nome
         device_name = get_device_name();
@@ -50,8 +58,10 @@ void setup(){
         //Ativando Web Server
         IPAddress IP = activate_internal_wifi();
         AsyncWebServer server = startup_server();
-
         while(true){
+            if(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
+                wifi_connect(ssid, pass);
+            }
             dnsServer.processNextRequest();
         }
         

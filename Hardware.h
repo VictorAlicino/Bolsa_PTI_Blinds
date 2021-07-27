@@ -3,6 +3,12 @@
 
 #include <Arduino.h>
 
+enum WIFI_STATUS{
+    NOT_READY,
+    READY_TO_CONNECT,
+    CONNECTED
+};
+
 String get_device_name();
 
 #endif

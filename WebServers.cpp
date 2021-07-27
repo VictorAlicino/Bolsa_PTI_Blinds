@@ -4,23 +4,13 @@
 #include <WiFi.h>
 #include "WebServers.h"
 #include "Connections.h"
+#include "Hardware.h"
 
 static const char* TAG = "WebServers";
+extern String ssid;
+extern String pass;
+extern int WIFI_CONNECTION_STATUS;
 
-class CaptiveRequestHandler : public AsyncWebHandler {
-public:
-  CaptiveRequestHandler() {}
-  virtual ~CaptiveRequestHandler() {}
-
-  bool canHandle(AsyncWebServerRequest *request){
-    //request->addInterestingHeader("ANY");
-    return true;
-  }
-
-  void handleRequest(AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/Teste1.html", String(), false, processor);
-  }
-};
 
 // Replaces placeholder with LED state value
 String processor(const String& var){
@@ -60,12 +50,12 @@ AsyncWebServer startup_server(){
 			server_port = (request->getParam("mqtt_port")->value()).toInt();
 
 			try{
-        		const TickType_t xDelay = 5000 / portTICK_PERIOD_MS;
-				vTaskDelay(xDelay);
-				wifi_connect(wifi_ssid, wifi_pass);
+				ssid = wifi_ssid;
+				pass = wifi_pass;
+				request->send(200, "text/plain", "Connecting");
+				WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
+				//mqtt_connect(server_ip, server_port);
 
-				mqtt_connect(server_ip, server_port);
-				request->send(202, "text/plain", "Connected");
 
 			}catch(...){
 				request->send(SPIFFS, "/Teste1.html", String(), false, processor);
@@ -80,7 +70,7 @@ AsyncWebServer startup_server(){
     	request->send(404, "text/plain", "Not found");
     });
 	
-	server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+
 	server.begin();
 	ESP_LOGD(TAG, "Web Server successfully activated");
 
