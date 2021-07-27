@@ -16,7 +16,6 @@ static const char* TAG = "Connections";
 
 void wifi_connect(String ssid, String password){
     try{
-        WiFi.mode(WIFI_STA);
         WiFi.begin(ssid.c_str(), password.c_str());
         ESP_LOGD(TAG, "Connecting to WiFi");
         const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
@@ -26,13 +25,13 @@ void wifi_connect(String ssid, String password){
 
         //Realizando mais tentativas 
         int attemps = 5;
-        for(int counter = 0; WiFi.status() == WL_CONNECTED && counter < attemps; counter++){
+        for(int counter = 0; WiFi.status() != WL_CONNECTED && counter < attemps; counter++){
             vTaskDelay(xDelay*10);
             ESP_LOGE(TAG, "Connection Failed! %d Attemps remaining!", attemps - counter);
             ESP_LOGD(TAG, "Retrying...");
         }
         if(WiFi.status() != WL_CONNECTED){
-            ESP_LOGE(TAG, "Connection failed after 10 attemps.");
+            ESP_LOGE(TAG, "Connection failed after 5 attemps.");
             throw network_connection_error();
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
@@ -52,6 +51,7 @@ IPAddress activate_internal_wifi(){
     ESP_LOGD(TAG, "Initializing Internal Wireless Netowrk");
     String name = "Persiana Inteligente ";
     name = name + "(" + device_name + ")";
+    WiFi.mode(WIFI_AP_STA);
     WiFi.softAP(name.c_str(), NULL);
     IPAddress IP = WiFi.softAPIP();
     dnsServer.start(53, "*", IP);

@@ -37,29 +37,19 @@ AsyncWebServer startup_server(){
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
     server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
-		String wifi_ssid;
-    	String wifi_pass;
     	String server_ip;
 		int server_port;
 
 		if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password") &&
 			request->hasParam("mqtt_ip") && request->hasParam("mqtt_port")){
-			wifi_ssid = request->getParam("wifi_ssid")->value();
-			wifi_pass = request->getParam("wifi_password")->value();
+			ssid = request->getParam("wifi_ssid")->value();
+			pass = request->getParam("wifi_password")->value();
 			server_ip = request->getParam("mqtt_ip")->value();
 			server_port = (request->getParam("mqtt_port")->value()).toInt();
-
-			try{
-				ssid = wifi_ssid;
-				pass = wifi_pass;
-				request->send(200, "text/plain", "Connecting");
-				WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
-				//mqtt_connect(server_ip, server_port);
-
-
-			}catch(...){
-				request->send(SPIFFS, "/Teste1.html", String(), false, processor);
-			}
+			request->send(102, "text/plain", "Connecting");
+			WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
+			
+			//mqtt_connect(server_ip, server_port);
     	}
 		else {
     		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
