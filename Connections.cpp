@@ -11,12 +11,16 @@ extern String device_name;
 extern Preferences flash;
 extern PubSubClient mqttClient;
 extern DNSServer dnsServer;
+extern String ssid;
+extern String pass;
+extern String server_ip;
+extern int server_port;
 extern int WIFI_CONNECTION_STATUS;
 static const char* TAG = "Connections";
 
-void wifi_connect(String ssid, String password){
+void wifi_connect(){
     try{
-        WiFi.begin(ssid.c_str(), password.c_str());
+        WiFi.begin(ssid.c_str(), pass.c_str());
         ESP_LOGD(TAG, "Connecting to WiFi");
         const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
 
@@ -32,7 +36,7 @@ void wifi_connect(String ssid, String password){
         }
         if(WiFi.status() != WL_CONNECTED){
             ESP_LOGE(TAG, "Connection failed after 5 attemps.");
-            throw network_connection_error();
+            //throw network_connection_error();
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "Connected");
@@ -44,7 +48,7 @@ void wifi_connect(String ssid, String password){
         WIFI_CONNECTION_STATUS = NOT_READY;
         ESP_LOGE(TAG, "Network Connection Error -> Throwing Exception.");
         
-        throw e;
+        //throw e;
     }
 }
 

@@ -9,6 +9,8 @@
 static const char* TAG = "WebServers";
 extern String ssid;
 extern String pass;
+extern String server_ip;
+extern int server_port;
 extern int WIFI_CONNECTION_STATUS;
 
 
@@ -48,6 +50,9 @@ AsyncWebServer startup_server(){
 			server_port = (request->getParam("mqtt_port")->value()).toInt();
 			request->send(102, "text/plain", "Connecting");
 			WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
+			if(WIFI_CONNECTION_STATUS == CONNECTED){
+				request->send(102, "text/plain", "Connected");
+			}
 			
 			//mqtt_connect(server_ip, server_port);
     	}

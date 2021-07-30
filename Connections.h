@@ -20,7 +20,7 @@ struct mqtt_connection_error: public std::exception
     }
 };
 
-void wifi_connect(String ssid, String password);
+void wifi_connect();
 
 bool mqtt_connect(String server, int port);
 

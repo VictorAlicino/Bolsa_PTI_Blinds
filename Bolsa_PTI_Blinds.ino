@@ -28,6 +28,8 @@ String device_name;
 DNSServer dnsServer;
 String ssid;
 String pass;
+String server_ip;
+int server_port;
 static const char* TAG = "Main";
 //Fim das Variáveis Globais
 
@@ -60,7 +62,13 @@ void setup(){
         AsyncWebServer server = startup_server();
         while(true){
             if(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
-                wifi_connect(ssid, pass);
+                wifi_connect();
+                while(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
+                    continue;
+                }
+            }
+            else if(WIFI_CONNECTION_STATUS == CONNECTED){
+                //Conectado
             }
             dnsServer.processNextRequest();
         }
