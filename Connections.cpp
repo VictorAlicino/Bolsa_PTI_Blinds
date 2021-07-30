@@ -41,6 +41,7 @@ void wifi_connect(String ssid, String password){
             ESP_LOGD(TAG, "WiFi Credentials has been written in memory");
         }
     }catch(std::exception& e){
+        WIFI_CONNECTION_STATUS = NOT_READY;
         ESP_LOGE(TAG, "Network Connection Error -> Throwing Exception.");
         
         throw e;
