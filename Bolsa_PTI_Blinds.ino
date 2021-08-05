@@ -64,7 +64,7 @@ void setup(){
         while(true){
             if(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
                 try{
-                    wifi_connect(ssid, pass);
+                    wifi_connect();
                 }catch(...){
                     ESP_LOGD("WiFi Connection Error");
                 }
