@@ -28,11 +28,14 @@ String device_name;
 DNSServer dnsServer;
 String ssid;
 String pass;
+String mqtt_server_ip;
+int mqtt_server_port;
 static const char* TAG = "Main";
 //Fim das Variáveis Globais
 
 //FLAGS Globais
 int WIFI_CONNECTION_STATUS;
+int MQTT_CONNECTION_STATUS;
 //Fim das FLAGS Globais
 
 
@@ -60,7 +63,18 @@ void setup(){
         AsyncWebServer server = startup_server();
         while(true){
             if(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
-                wifi_connect(ssid, pass);
+                try{
+                    wifi_connect(ssid, pass);
+                }catch(...){
+                    ESP_LOGD("WiFi Connection Error");
+                }
+            }
+            if((WIFI_CONNECTION_STATUS == CONNECTED) && (MQTT_CONNECTION_STATUS == READY_TO_CONNECT)){
+                try{
+                    mqtt_connect(mqtt_server_ip, mqtt_server_port);
+                }catch(...){
+                    ESP_LOGD("MQTT Connection Error");
+                }
             }
             dnsServer.processNextRequest();
         }

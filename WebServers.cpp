@@ -9,7 +9,10 @@
 static const char* TAG = "WebServers";
 extern String ssid;
 extern String pass;
+extern String mqtt_server_ip;
+extern int mqtt_server_port;
 extern int WIFI_CONNECTION_STATUS;
+extern int MQTT_CONNECTION_STATUS;
 
 
 // Replaces placeholder with LED state value
@@ -37,17 +40,16 @@ AsyncWebServer startup_server(){
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
     server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
-    	String server_ip;
-		int server_port;
 
 		if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password") &&
 			request->hasParam("mqtt_ip") && request->hasParam("mqtt_port")){
 			ssid = request->getParam("wifi_ssid")->value();
 			pass = request->getParam("wifi_password")->value();
-			server_ip = request->getParam("mqtt_ip")->value();
-			server_port = (request->getParam("mqtt_port")->value()).toInt();
-			request->send(102, "text/plain", "Connecting");
+			mqtt_server_ip = request->getParam("mqtt_ip")->value();
+			mqtt_server_port = (request->getParam("mqtt_port")->value()).toInt();
+			request->send(200, "text/plain", "Connecting");
 			WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
+			MQTT_CONNECTION_STATUS = READY_TO_CONNECT;
 			
 			//mqtt_connect(server_ip, server_port);
     	}

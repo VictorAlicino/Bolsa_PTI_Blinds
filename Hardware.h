@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-enum WIFI_STATUS{
+enum CONNECTION_STATUS{
     NOT_READY,
     READY_TO_CONNECT,
     CONNECTED

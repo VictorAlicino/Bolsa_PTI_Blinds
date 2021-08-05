@@ -12,6 +12,7 @@ extern Preferences flash;
 extern PubSubClient mqttClient;
 extern DNSServer dnsServer;
 extern int WIFI_CONNECTION_STATUS;
+extern int MQTT_CONNECTION_STATUS;
 static const char* TAG = "Connections";
 
 void wifi_connect(String ssid, String password){
@@ -66,18 +67,16 @@ IPAddress activate_internal_wifi(){
 bool mqtt_connect(String server, int port){
     try{
         mqttClient.setServer(server.c_str(), port);
-
         if(mqttClient.connected() != true){
             throw mqtt_connection_error();
         }
-        
         WiFiClient client;
         mqttClient.connect("0001");
         mqttClient.setCallback(mqtt_callback);
         mqttClient.setClient(client);
-
     }
     catch(std::exception& e){
+        MQTT_CONNECTION_STATUS = NOT_READY;
         ESP_LOGE(TAG, "MQTT Connection Error -> Throwing Exception.");
         throw e;
     }
