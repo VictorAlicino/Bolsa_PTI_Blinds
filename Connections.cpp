@@ -13,10 +13,12 @@ extern PubSubClient mqttClient;
 extern DNSServer dnsServer;
 extern String ssid;
 extern String pass;
-extern String server_ip;
-extern int server_port;
+extern String mqtt_server_ip;
+extern int mqtt_server_port;
 extern int WIFI_CONNECTION_STATUS;
 extern int MQTT_CONNECTION_STATUS;
+extern String mqtt_user;
+extern String mqtt_password;
 static const char* TAG = "Connections";
 
 void wifi_connect(){
@@ -31,12 +33,12 @@ void wifi_connect(){
         //Realizando mais tentativas 
         int attemps = 5;
         for(int counter = 0; WiFi.status() != WL_CONNECTED && counter < attemps; counter++){
-            vTaskDelay(xDelay*10);
+            vTaskDelay(xDelay*5);
             ESP_LOGE(TAG, "Connection Failed! %d Attemps remaining!", attemps - counter);
             ESP_LOGD(TAG, "Retrying...");
         }
         if(WiFi.status() != WL_CONNECTED){
-            ESP_LOGE(TAG, "Connection failed after 5 attemps.");
+            ESP_LOGE(TAG, "Connection failed after %d attemps.", attemps);
             //throw network_connection_error();
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
@@ -68,16 +70,18 @@ IPAddress activate_internal_wifi(){
     return IP;
 }
 
-bool mqtt_connect(String server, int port){
+bool mqtt_connect(){
     try{
-        mqttClient.setServer(server.c_str(), port);
+        mqttClient.setServer(mqtt_server_ip.c_str(), mqtt_server_port);
+        mqttClient.connect(device_name.c_str(), "esp32", "senha");
+        mqttClient.setCallback(mqtt_callback);
         if(mqttClient.connected() != true){
             throw mqtt_connection_error();
         }
-        WiFiClient client;
-        mqttClient.connect("0001");
-        mqttClient.setCallback(mqtt_callback);
-        mqttClient.setClient(client);
+        mqttClient.subscribe("0001");
+        mqttClient.publish("qualquertopico","hello world");
+        MQTT_CONNECTION_STATUS = CONNECTED;
+        ESP_LOGD(TAG, "MQTT Connected");
     }
     catch(std::exception& e){
         MQTT_CONNECTION_STATUS = NOT_READY;
@@ -86,7 +90,7 @@ bool mqtt_connect(String server, int port){
     }
 }
 
-void mqtt_callback(char* topic, byte* message, unsigned length){
+void mqtt_callback(char* topic, byte* message, unsigned int length){
     ESP_LOGD(TAG, "Data Received");
 	
 	if(!strcmp(topic, "0001")){

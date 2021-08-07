@@ -21,7 +21,7 @@
  //Fim das configurações
 
 //Variáveis Globais
-PubSubClient mqttClient;
+PubSubClient mqttClient(*(new WiFiClient()));
 RotaryEncoder encoder(32, 33);
 Preferences flash;
 String device_name;
@@ -30,6 +30,8 @@ String ssid;
 String pass;
 String mqtt_server_ip;
 int mqtt_server_port;
+String mqtt_user;
+String mqtt_password;
 static const char* TAG = "Main";
 //Fim das Variáveis Globais
 
@@ -51,6 +53,7 @@ void setup(){
     if(first_boot == true){
         ESP_LOGD(TAG, "This device is not configured yet");
         WIFI_CONNECTION_STATUS = NOT_READY;
+
         
         //Definindo o nome
         device_name = get_device_name();
@@ -71,12 +74,13 @@ void setup(){
             }
             if((WIFI_CONNECTION_STATUS == CONNECTED) && (MQTT_CONNECTION_STATUS == READY_TO_CONNECT)){
                 try{
-                    mqtt_connect(mqtt_server_ip, mqtt_server_port);
+                    mqtt_connect();
                 }catch(...){
                     ESP_LOGD("MQTT Connection Error");
                 }
             }
             dnsServer.processNextRequest();
+            mqttClient.loop();
         }
         
         //Ativando Bluetooth

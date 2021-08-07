@@ -22,11 +22,11 @@ struct mqtt_connection_error: public std::exception
 
 void wifi_connect();
 
-bool mqtt_connect(String server, int port);
+bool mqtt_connect();
 
 IPAddress activate_internal_wifi();
 
-void mqtt_callback(char* topic, byte* message, unsigned length);
+void mqtt_callback(char* topic, byte* message, unsigned int length);
 
 String get_mac_address();
 
