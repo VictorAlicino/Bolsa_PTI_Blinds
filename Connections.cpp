@@ -84,6 +84,9 @@ bool mqtt_connect(){
             mqttClient.publish("qualquertopico","hello world");
             MQTT_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "MQTT Connected");
+            //flash.putString("mqtt_server_ip", mqtt_server_ip);
+            //flash.putInt("mqtt_server_port", mqtt_server_port);
+            ESP_LOGD(TAG, "MQTT Credentials has been written in memory");
         }else{
             throw mqtt_connection_error();
         }
