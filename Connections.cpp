@@ -72,16 +72,21 @@ IPAddress activate_internal_wifi(){
 
 bool mqtt_connect(){
     try{
-        mqttClient.setServer(mqtt_server_ip.c_str(), mqtt_server_port);
-        mqttClient.connect(device_name.c_str(), "esp32", "senha");
-        mqttClient.setCallback(mqtt_callback);
-        if(mqttClient.connected() != true){
+        if(WIFI_CONNECTION_STATUS == CONNECTED){
+            mqttClient.setServer(mqtt_server_ip.c_str(), mqtt_server_port);
+            String name = "Persiana " + device_name;
+            mqttClient.connect(name.c_str());
+            mqttClient.setCallback(mqtt_callback);
+            if(mqttClient.connected() != true){
+                throw mqtt_connection_error();
+            }
+            mqttClient.subscribe("0001");
+            mqttClient.publish("qualquertopico","hello world");
+            MQTT_CONNECTION_STATUS = CONNECTED;
+            ESP_LOGD(TAG, "MQTT Connected");
+        }else{
             throw mqtt_connection_error();
         }
-        mqttClient.subscribe("0001");
-        mqttClient.publish("qualquertopico","hello world");
-        MQTT_CONNECTION_STATUS = CONNECTED;
-        ESP_LOGD(TAG, "MQTT Connected");
     }
     catch(std::exception& e){
         MQTT_CONNECTION_STATUS = NOT_READY;

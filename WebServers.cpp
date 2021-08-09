@@ -14,6 +14,21 @@ extern int mqtt_server_port;
 extern int WIFI_CONNECTION_STATUS;
 extern int MQTT_CONNECTION_STATUS;
 
+class CaptiveRequestHandler : public AsyncWebHandler {
+public:
+  CaptiveRequestHandler() {}
+  virtual ~CaptiveRequestHandler() {}
+
+  bool canHandle(AsyncWebServerRequest *request){
+    //request->addInterestingHeader("ANY");
+    return true;
+  }
+
+  void handleRequest(AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/Teste1.html", String(), false, processor); 
+  }
+};
+
 
 // Replaces placeholder with LED state value
 String processor(const String& var){
@@ -50,13 +65,13 @@ AsyncWebServer startup_server(){
 			request->send(200, "text/plain", "Connecting");
 			WIFI_CONNECTION_STATUS = READY_TO_CONNECT;
 			MQTT_CONNECTION_STATUS = READY_TO_CONNECT;
-			
-			//mqtt_connect(server_ip, server_port);
     	}
 		else {
     		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
     	}
     });
+
+	server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
 
 	server.onNotFound([](AsyncWebServerRequest *request){
     	request->send(404, "text/plain", "Not found");

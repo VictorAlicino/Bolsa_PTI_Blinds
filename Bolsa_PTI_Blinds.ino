@@ -54,16 +54,19 @@ void setup(){
         ESP_LOGD(TAG, "This device is not configured yet");
         WIFI_CONNECTION_STATUS = NOT_READY;
 
-        
         //Definindo o nome
         device_name = get_device_name();
         flash.putString("device_name", device_name);
         ESP_LOGD(TAG, "Device Name: %s", device_name);
-        
 
         //Ativando Web Server
         IPAddress IP = activate_internal_wifi();
         AsyncWebServer server = startup_server();
+
+        //Ativando Bluetooth
+        //TODO Bluetooth
+
+        //Loop de Configuração
         while(true){
             if(WIFI_CONNECTION_STATUS == READY_TO_CONNECT){
                 try{
@@ -83,10 +86,40 @@ void setup(){
             mqttClient.loop();
         }
         
-        //Ativando Bluetooth
+    }else{
+        ESP_LOGD(TAG, "Device already configured");
+
+        //Definindo o nome
+        device_name = flash.getString("device_name", get_device_name());
+        ESP_LOGD(TAG, "Device Name: %s", device_name);
+        
+        //Definindo credenciais de conexão
+        ssid = flash.getString("wifi_ssid", "");
+        pass = flash.getString("wifi_password", "");
+        mqtt_server_ip = flash.getString("mqtt_server_ip", "");
+        mqtt_server_port = flash.getInt("mqtt_server_port", 0);
+        mqtt_user = flash.getString("mqtt_user", "");
+        mqtt_password = flash.getString("mqtt_password", "");
+
+        //Conectando WIFI
+        try{
+            wifi_connect();
+        }catch(...){
+            ESP_LOGD("WiFi Connection Error");
+            flash.putBool("first_boot", true);
+            ESP.restart();
+        }
+        
+        //Conectando MQTT
+        try{
+            mqtt_connect();
+        }catch(...){
+            ESP_LOGD("MQTT Connection Error");
+        }
+
     }
 }
 
 void loop(){
-    //TODO
+    mqttClient.loop();
 }
