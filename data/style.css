@@ -1,31 +1,127 @@
-html {
-    font-family: Helvetica;
-    display: inline-block;
-    margin: 0px auto;
-  }
-  h1{
-    color: #0F3376;
-    padding: 2vh;
-  }
-  p{
-    font-size: 1.5rem;
-  }
-  .button {
-    display: inline-block;
-    background-color: #008CBA;
-    border: none;
+:root {
+    /* Colors: */
+    --black: #000000;
+    --light-gray: #E8E8E8;
+    --white: #FFFFFF;
+    --light-green-1: #C7DCDB;
+    --pti-color-1: #15ABAE;
+    --pti-color-2: #174F66;
+    --pti-color-3: #003C69;
+    --pti-color-4: #E87227;
+    --pti-color-5: #FBAF1B;
+    --pti-color-6: #E43A50;
+    --pti-color-7: #852781;
+    --pti-color-8: #5B1941;
+    --pti-color-9: #E2D4D5;
+    --pti-color-10: #B8CB32;
+    --pti-color-11: #E5EFCB;
+    --pti-color-12: #7E9450;
+    --pti-color-13: #30B45C;
+    --pti-color-14: #AD792A;
+    --pti-color-15: #DFD5B7;
+}
+
+body {
+    background-color: var(--light-gray);
+    background-image: url("Aguas-da-integracao");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 3000px;
+    position: relative;
+}
+
+html, body {
+    margin:0px;
+    padding: 0px;
+    height: 100%;
+}
+
+.initial_header {
+    text-align: center;
+    position: relative;
+}
+
+.initial_header h1{
+    color: var(--pti-color-3);
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 300px;
+    font-size: 50px;
+    letter-spacing: 0;
+}
+
+.initial_header h2{
+    color: var(--pti-color-3);
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    letter-spacing: 0;
+}
+
+.initial_header h3{
+    color: var(--pti-color-3);
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 0;
+}
+
+.initial_header input[type=text], input[type=password] {
+    border: 2px solid var(--pti-color-3);
     border-radius: 4px;
-    color: white;
-    padding: 16px 40px;
-    text-decoration: none;
-    font-size: 30px;
-    margin: 2px;
-    cursor: pointer;
-  }
-  .button2 {
-    background-color: #f44336;
-  }
-  .fname{
-    text-align: left;
-    padding: auto;
-  }
+    letter-spacing: 0;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 0;
+}
+
+.initial_header input[type=submit]{
+    background-color:#15abae;
+	border-radius:10px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family: 'Roboto', sans-serif;
+	font-size:17px;
+	padding:10px 40px;
+	text-decoration:none;
+}
+
+.start_button_session{
+    text-align: center;
+    position: relative;
+}
+
+.start_button {
+	background-color:#15abae;
+	border-radius:10px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family: 'Roboto', sans-serif;
+	font-size:17px;
+	padding:16px 27px;
+	text-decoration:none;
+}
+.start_button:hover {
+	background-color:#175066;
+}
+.start_button:active {
+	position:relative;
+}
+
+.initial_bottom{
+    margin-top: 100%;
+    position: fixed; 
+    bottom: -80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    position: relative;
+    max-width: 250px;
+    height: auto
+}

@@ -7,6 +7,7 @@
 #include "Hardware.h"
 
 static const char* TAG = "WebServers";
+extern String device_name;
 extern String ssid;
 extern String pass;
 extern String mqtt_server_ip;
@@ -25,13 +26,17 @@ public:
   }
 
   void handleRequest(AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/Teste1.html", String(), false, processor); 
+    request->send(SPIFFS, "/index.html", String(), false, processor); 
   }
 };
 
 
 // Replaces placeholder with LED state value
 String processor(const String& var){
+	if(var == "DEVICE_NAME"){
+		String name = device_name + " Persiana Inteligente";
+		return name;
+	}
 }
 
 AsyncWebServer startup_server(){
@@ -44,7 +49,7 @@ AsyncWebServer startup_server(){
 
     // Route for root / web page
   	server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-  		request->send(SPIFFS, "/Teste1.html", String(), false, processor);
+  		request->send(SPIFFS, "/index.html", String(), false, processor);
 		ESP_LOGI(TAG, "A Client has been Connected");
   	});
 
@@ -72,6 +77,11 @@ AsyncWebServer startup_server(){
     });
 
 	server.addHandler(new CaptiveRequestHandler()).setFilter(ON_AP_FILTER);//only when requested from AP
+	
+	server.on("/Aguas-da-integracao", HTTP_GET, [](AsyncWebServerRequest *request){
+    	request->send(SPIFFS, "/Aguas-da-integracao.png", "image/png");
+  	});
+
 
 	server.onNotFound([](AsyncWebServerRequest *request){
     	request->send(404, "text/plain", "Not found");
