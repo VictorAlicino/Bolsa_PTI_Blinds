@@ -39,7 +39,7 @@ void wifi_connect(){
         }
         if(WiFi.status() != WL_CONNECTED){
             ESP_LOGE(TAG, "Connection failed after %d attemps.", attemps);
-            //throw network_connection_error();
+            throw network_connection_error();
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "Connected");
@@ -51,7 +51,7 @@ void wifi_connect(){
         WIFI_CONNECTION_STATUS = NOT_READY;
         ESP_LOGE(TAG, "Network Connection Error -> Throwing Exception.");
         
-        //throw e;
+        throw e;
     }
 }
 

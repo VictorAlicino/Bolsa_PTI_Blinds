@@ -23,7 +23,7 @@
 
 body {
     background-color: var(--light-gray);
-    background-image: url("./assets/Aguas-da-integracao.svg");
+    background-image: url("Aguas-da-integracao");
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: 3000px;

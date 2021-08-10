@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <title>Smart Blinds</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" href="data:,">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-  <div align="center"> 
-    <h1>Configuração</h1>
-    <h3>Persiana Inteligente</h3>
-    <h4>Digite as configurações abaixo:</h4>
-    <form action="/get">
-      <label for="fname">SSID:</label><br>
-      <input type="text" name="wifi_ssid" maxlength="15" size="15"><br>
-      <label for="fname">PASSWORD:</label><br>
-      <input type="password" name="wifi_password" maxlength="64" size="15"><br>
-      <label for="fname">BROKER IP:</label><br>
-      <input type="text" name="mqtt_ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"><br>
-      <label for="fname">BROKER PORT:</label><br>
-      <input type="text" name="mqtt_port" size="15"><br>
-      <input type="submit" value="Definir">
-    </form><br>
-  </div>
-</body>
+    <head>
+        <title>%DEVICE_NAME%</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="style1.css">
+    </head>
 </html>
+<body>
+    <div class="initial_header">
+        <h1>CONFIGURAÇÃO INICIAL</h1>
+        <h2>Persianas Inteligentes</h2>
+            <form action="/get">
+              <h3>SSID:</h3>
+              <input type="text" name="wifi_ssid" size="15"><br>
+              <h3>PASSWORD:</h3>
+              <input type="password" name="wifi_password" maxlength="64" size="15"><br>
+              <h3>SERVER IP:</h3>
+              <input type="text" name="mqtt_ip" minlength="7" maxlength="15" size="15" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$"><br>
+              <h3>SERVER PORT:</h3>
+              <input type="text" name="mqtt_port" size="15"><br><br>
+              <input type="submit" value="DEFINIR">
+            </form><br>
+    </div>
+</body>
