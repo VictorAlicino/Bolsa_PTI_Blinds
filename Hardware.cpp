@@ -11,3 +11,15 @@ String get_device_name(){
 	sprintf(baseMacChr, "%02X%02X", baseMac[0], baseMac[5]);
 	return String(baseMacChr);
 }
+
+void blinds_down(){
+
+}
+
+void blinds_up(){
+
+}
+
+void blinds_stop(){
+	
+}

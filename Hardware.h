@@ -11,4 +11,10 @@ enum CONNECTION_STATUS{
 
 String get_device_name();
 
+void blinds_down();
+
+void blinds_up();
+
+void blinds_stop();
+
 #endif

@@ -78,6 +78,10 @@ void setup(){
             if((WIFI_CONNECTION_STATUS == CONNECTED) && (MQTT_CONNECTION_STATUS == READY_TO_CONNECT)){
                 try{
                     mqtt_connect();
+                    flash.putBool("first_boot", false);
+                    flash.end();
+                    mqttClient.disconnect();
+                    ESP.restart();
                 }catch(...){
                     ESP_LOGD("MQTT Connection Error");
                 }
@@ -115,6 +119,8 @@ void setup(){
             mqtt_connect();
         }catch(...){
             ESP_LOGD("MQTT Connection Error");
+            flash.putBool("first_boot", true);
+            ESP.restart();
         }
 
     }

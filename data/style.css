@@ -91,6 +91,30 @@ html, body {
 	text-decoration:none;
 }
 
+.button{
+    background-color:#15abae;
+	border-radius:10px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family: 'Roboto', sans-serif;
+	font-size:17px;
+	padding:10px 40px;
+	text-decoration:none;
+}
+
+.button3{
+    background-color:#E43A50;
+	border-radius:10px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family: 'Roboto', sans-serif;
+	font-size:17px;
+	padding:10px 40px;
+	text-decoration:none;
+}
+
 .start_button_session{
     text-align: center;
     position: relative;

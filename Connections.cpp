@@ -43,8 +43,8 @@ void wifi_connect(){
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "Connected");
-            //flash.putString("wifi_ssid", ssid);
-            //flash.putString("wifi_password", password);
+            flash.putString("wifi_ssid", ssid);
+            flash.putString("wifi_password", pass);
             ESP_LOGD(TAG, "WiFi Credentials has been written in memory");
         }
     }catch(std::exception& e){
@@ -84,10 +84,11 @@ bool mqtt_connect(){
             mqttClient.publish("qualquertopico","hello world");
             MQTT_CONNECTION_STATUS = CONNECTED;
             ESP_LOGD(TAG, "MQTT Connected");
-            //flash.putString("mqtt_server_ip", mqtt_server_ip);
-            //flash.putInt("mqtt_server_port", mqtt_server_port);
+            flash.putString("mqtt_server_ip", mqtt_server_ip);
+            flash.putInt("mqtt_server_port", mqtt_server_port);
             ESP_LOGD(TAG, "MQTT Credentials has been written in memory");
         }else{
+            MQTT_CONNECTION_STATUS == NOT_READY;
             throw mqtt_connection_error();
         }
     }
@@ -109,14 +110,14 @@ void mqtt_callback(char* topic, byte* message, unsigned int length){
         buffer[length] = '\0';
 
         if (strcmp(buffer, "0001") == 0) {
+            blinds_down();
             ESP_LOGD(TAG, "Abrindo Persiana");
-            //TODO
         }else if (strcmp(buffer, "0002") == 0) {
+            blinds_up();
             ESP_LOGD(TAG, "Fechando Persiana");
-            //TODO
         }else if (strcmp(buffer, "0003") == 0){
+            blinds_stop();
             ESP_LOGD(TAG, "Parando Imediatamente");
-            digitalWrite(2, LOW);
         }else{
             ESP_LOGE(TAG, "Não foi possível processar a mensagem");
         }
