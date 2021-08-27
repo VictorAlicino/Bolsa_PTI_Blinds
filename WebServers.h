@@ -8,8 +8,8 @@ String _index_config_processor(const String& var);
 
 String _index_running_processor(const String& var);
 
-AsyncWebServer startup_server();
+void startup_server();
 
-AsyncWebServer running_server();
+void running_server();
 
 #endif
