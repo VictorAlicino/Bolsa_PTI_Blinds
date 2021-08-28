@@ -79,8 +79,9 @@ void setup(){
                 try{
                     mqtt_connect();
                     flash.putBool("first_boot", false);
-                    flash.end();
                     mqttClient.disconnect();
+                    flash.end();
+                    server.end();
                     ESP.restart();
                 }catch(...){
                     ESP_LOGD("MQTT Connection Error");
@@ -100,10 +101,8 @@ void setup(){
         //Definindo credenciais de conexão
         ssid = flash.getString("wifi_ssid", "");
         pass = flash.getString("wifi_password", "");
-        mqtt_server_ip = flash.getString("mqtt_server_ip", "");
-        mqtt_server_port = flash.getInt("mqtt_server_port", 0);
-        mqtt_user = flash.getString("mqtt_user", "");
-        mqtt_password = flash.getString("mqtt_password", "");
+        mqtt_server_ip = flash.getString("mqtt_ip", "");
+        mqtt_server_port = flash.getInt("mqtt_port", 0);
 
         //Conectando WIFI
         try{
@@ -122,6 +121,8 @@ void setup(){
             flash.putBool("first_boot", true);
             ESP.restart();
         }
+
+        AsyncWebServer server = running_server();
 
     }
 }

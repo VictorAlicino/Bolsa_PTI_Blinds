@@ -23,7 +23,7 @@
 
 body {
     background-color: var(--light-gray);
-    background-image: url("/assets/Aguas-da-integracao.svg");
+    background-image: url("./assets/Aguas-da-integracao.svg");
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: 3000px;
@@ -81,30 +81,6 @@ html, body {
 
 .initial_header input[type=submit]{
     background-color:#15abae;
-	border-radius:10px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family: 'Roboto', sans-serif;
-	font-size:17px;
-	padding:10px 40px;
-	text-decoration:none;
-}
-
-.button{
-    background-color:#15abae;
-	border-radius:10px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family: 'Roboto', sans-serif;
-	font-size:17px;
-	padding:10px 40px;
-	text-decoration:none;
-}
-
-.button3{
-    background-color:#E43A50;
 	border-radius:10px;
 	display:inline-block;
 	cursor:pointer;
