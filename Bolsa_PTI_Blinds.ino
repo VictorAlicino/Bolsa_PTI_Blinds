@@ -26,6 +26,7 @@ RotaryEncoder encoder(32, 33);
 Preferences flash;
 String device_name;
 DNSServer dnsServer;
+AsyncWebServer server(80);
 String ssid;
 String pass;
 String mqtt_server_ip;
@@ -61,7 +62,7 @@ void setup(){
 
         //Ativando Web Server
         IPAddress IP = activate_internal_wifi();
-        AsyncWebServer server = startup_server();
+        startup_server();
 
         //Ativando Bluetooth
         //TODO Bluetooth
@@ -96,6 +97,10 @@ void setup(){
 
         //Definindo o nome
         device_name = flash.getString("device_name", get_device_name());
+        String name = "Persiana Inteligente ";
+        name = name + "(" + device_name + ")";
+        WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+        WiFi.setHostname(name.c_str());
         ESP_LOGD(TAG, "Device Name: %s", device_name);
         
         //Definindo credenciais de conexão
@@ -103,7 +108,7 @@ void setup(){
         pass = flash.getString("wifi_password", "");
         mqtt_server_ip = flash.getString("mqtt_ip", "");
         mqtt_server_port = flash.getInt("mqtt_port", 0);
-
+        
         //Conectando WIFI
         try{
             wifi_connect();
@@ -121,9 +126,7 @@ void setup(){
             flash.putBool("first_boot", true);
             ESP.restart();
         }
-
-        AsyncWebServer server = running_server();
-
+        running_server();
     }
 }
 

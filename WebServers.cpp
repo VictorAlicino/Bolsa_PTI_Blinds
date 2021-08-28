@@ -1,4 +1,4 @@
-#include <ESPAsyncWebServer.h>
+#include <ESPAsyncWebserver.h>
 #include <SPIFFS.h>
 #include <PubSubClient.h>
 #include <WiFi.h>
@@ -11,6 +11,7 @@ extern String device_name;
 extern String ssid;
 extern String pass;
 extern String mqtt_server_ip;
+extern AsyncWebServer server;
 extern int mqtt_server_port;
 extern int WIFI_CONNECTION_STATUS;
 extern int MQTT_CONNECTION_STATUS;
@@ -48,9 +49,8 @@ String _index_running_processor(const String& var){
   	return String();
 }
 
-AsyncWebServer startup_server(){
+void startup_server(){
 	ESP_LOGD(TAG, "Entering Web Server Configuration Mode");
-    AsyncWebServer server(80);
 	
 	if(!SPIFFS.begin(true)){
 		ESP_LOGE(TAG, "An Error has occurred while mounting SPIFFS");
@@ -69,7 +69,6 @@ AsyncWebServer startup_server(){
 
     // Send a GET request to <ESP_IP>/get?input1=<inputMessage>
     server.on("/get", HTTP_GET, [] (AsyncWebServerRequest *request) {
-
 		if (request->hasParam("wifi_ssid") && request->hasParam("wifi_password") &&
 			request->hasParam("mqtt_ip") && request->hasParam("mqtt_port")){
 			ssid = request->getParam("wifi_ssid")->value();
@@ -99,13 +98,10 @@ AsyncWebServer startup_server(){
 
 	server.begin();
 	ESP_LOGD(TAG, "Web Server successfully activated");
-
-	return server;
 }
 
-AsyncWebServer running_server(){
+void running_server(){
 	ESP_LOGD(TAG, "Entering Web Server Running Mode");
-    AsyncWebServer server(80);
 	
 	if(!SPIFFS.begin(true)){
 		ESP_LOGE(TAG, "An Error has occurred while mounting SPIFFS");
@@ -147,6 +143,4 @@ AsyncWebServer running_server(){
 
 	server.begin();
 	ESP_LOGD(TAG, "Web Server successfully activated");
-
-	return server;
 }

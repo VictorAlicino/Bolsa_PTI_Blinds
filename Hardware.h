@@ -9,6 +9,18 @@ enum CONNECTION_STATUS{
     CONNECTED
 };
 
+enum MESSAGES_IDENTIFIERS{
+    SERVER_RECEIVED = 0x00,
+    DEVICE_SEND     = 0X01,
+};
+
+enum MODE{
+    BLINDS_STOP         = 0X00,
+    BLINDS_UP           = 0X01,
+    BLINDS_DOWN         = 0X02,
+    BLINDS_LINEAR_VALUE = 0x03,
+};
+
 String get_device_name();
 
 void blinds_down();
