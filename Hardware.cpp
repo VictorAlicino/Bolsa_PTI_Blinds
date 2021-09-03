@@ -1,11 +1,19 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
+#include <RotaryEncoder.h>
 #include "Hardware.h"
 #include "esp_system.h"
 
 extern PubSubClient mqttClient;
 extern String device_name;
+extern RotaryEncoder encoder[NUMBER_OF_BLINDS_SUPPORTED];;
 static const char* TAG = "Hardware";
+
+Blinds_Pinout blinds_pin[NUMBER_OF_BLINDS_SUPPORTED];
+
+void Blinds_Init(){
+	blinds_pin[0].encoder_pin_A = 
+}
 
 String get_device_name(){
 	uint8_t baseMac[6];
@@ -86,3 +94,4 @@ void blinds_stop(){
 	mqttClient.publish("0001", message.c_str());
 	
 }
+

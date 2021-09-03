@@ -8,21 +8,12 @@
 #include "Hardware.h"
 
 //Pinos dos Dispotivos
-#define BUTTON_01 2 
-#define BUTTON_02 3
-#define BUTTON_03 4
-#define pHa 18
-#define pHb 19
-//Fim da definição de pinos
 
-//Configurações
-#define ACTIVATED LOW
-#define DEACTIVATED HIGH
- //Fim das configurações
+//Fim da definição de pinos
 
 //Variáveis Globais
 PubSubClient mqttClient(*(new WiFiClient()));
-RotaryEncoder encoder(32, 33);
+RotaryEncoder encoder[NUMBER_OF_BLINDS_SUPPORTED];
 Preferences flash;
 String device_name;
 DNSServer dnsServer;
