@@ -4,29 +4,32 @@
 #include <Arduino.h>
 
 //Configurações
-#define NUMBER_OF_BLINDS_SUPPORTED 4
+#define NUMBER_OF_BLINDS_SUPPORTED 3
 #define ENCODER_1_PIN_A
 #define ENCODER_1_PIN_B
 #define MOTOR_1_PIN_A
 #define MOTOR_1_PIN_B
 #define REED_SWITCH_1 
 
-#if NUMBER_OF_BLINDS_SUPPORTED < 1 || NUMBER_OF_BLINDS_SUPPORTED > 4
+#if NUMBER_OF_BLINDS_SUPPORTED < 1
     #error At least 1 blind is required
 #endif
-#if NUMBER_OF_BLINDS_SUPPORTED == 2
+#if NUMBER_OF_BLINDS_SUPPORTED > 4
+    #error Blinds exceeds the limit of 4
+#endif
+#if NUMBER_OF_BLINDS_SUPPORTED >= 2
     #define ENCODER_2_PIN_A
     #define ENCODER_2_PIN_B
     #define MOTOR_2_PIN_A
     #define MOTOR_2_PIN_B
     #define REED_SWITCH_2 
-#elif NUMBER_OF_BLINDS_SUPPORTED == 3
+#elif NUMBER_OF_BLINDS_SUPPORTED >= 3
     #define ENCODER_3_PIN_A
     #define ENCODER_3_PIN_B
     #define MOTOR_3_PIN_A
     #define MOTOR_3_PIN_B
     #define REED_SWITCH_3
-#elif NUMBER_OF_BLINDS_SUPPORTED == 4
+#elif NUMBER_OF_BLINDS_SUPPORTED >= 4
     #define ENCODER_4_PIN_A
     #define ENCODER_4_PIN_B
     #define MOTOR_4_PIN_A
