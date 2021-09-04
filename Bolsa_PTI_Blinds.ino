@@ -13,7 +13,7 @@
 
 //Variáveis Globais
 PubSubClient mqttClient(*(new WiFiClient()));
-RotaryEncoder encoder[NUMBER_OF_BLINDS_SUPPORTED];
+Blind Blinds[NUMBER_OF_BLINDS_SUPPORTED];
 Preferences flash;
 String device_name;
 DNSServer dnsServer;

@@ -6,13 +6,12 @@
 
 extern PubSubClient mqttClient;
 extern String device_name;
-extern RotaryEncoder encoder[NUMBER_OF_BLINDS_SUPPORTED];;
+extern Blind Blinds[NUMBER_OF_BLINDS_SUPPORTED];
 static const char* TAG = "Hardware";
 
-Blinds_Pinout blinds_pin[NUMBER_OF_BLINDS_SUPPORTED];
-
 void Blinds_Init(){
-	blinds_pin[0].encoder_pin_A = 
+
+	
 }
 
 String get_device_name(){

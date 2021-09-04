@@ -5,11 +5,11 @@
 
 //Configurações
 #define NUMBER_OF_BLINDS_SUPPORTED 3
-#define ENCODER_1_PIN_A
-#define ENCODER_1_PIN_B
-#define MOTOR_1_PIN_A
-#define MOTOR_1_PIN_B
-#define REED_SWITCH_1 
+#define ENCODER_1_PIN_A 32
+#define ENCODER_1_PIN_B 33
+#define MOTOR_1_PIN_A   18
+#define MOTOR_1_PIN_B   19
+#define REED_SWITCH_1   4
 
 #if NUMBER_OF_BLINDS_SUPPORTED < 1
     #error At least 1 blind is required
@@ -60,15 +60,12 @@ enum MODE{
     BLINDS_LINEAR_VALUE = 0x03,
 };
 
-typedef struct BLINDS_AVAILABLE_PIN{
-    uint8_t encoder_pin_A;
-    uint8_t encoder_pin_B;
-    uint8_t motor_pin_A;
-    uint8_t motor_pin_B;
-    uint8_t rspin;
-}Blinds_Pinout;
-
-extern Blinds_Pinout blinds_pin[NUMBER_OF_BLINDS_SUPPORTED];
+typedef struct BLINDS_DATA{
+    RotaryEncoder *encoder;
+    uint8_t motor_A;
+    uint8_t motor_B;
+    uint8_t reed_switch;
+}Blind;
 
 String get_device_name();
 
