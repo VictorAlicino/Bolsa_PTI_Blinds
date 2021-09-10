@@ -1,18 +1,40 @@
 #include <Arduino.h>
 #include <PubSubClient.h>
 #include <RotaryEncoder.h>
+#include <Preferences.h>
 #include "Hardware.h"
 #include "esp_system.h"
+
+int blind_0_actual_position;
+int blind_0_requested_position;
+int blind_0_absolute_zero;
+bool blind_0_moving;
+
+#if NUMBER_OF_BLINDS_SUPPORTED >= 2
+    int blind_1_actual_position;
+    int blind_1_requested_position;
+    int blind_1_absolute_zero;
+    bool blind_1_moving;
+#endif
+#if NUMBER_OF_BLINDS_SUPPORTED >= 3
+    int blind_2_actual_position;
+    int blind_2_requested_position;
+    int blind_2_absolute_zero;
+    bool blind_2_moving;
+#endif
+#if NUMBER_OF_BLINDS_SUPPORTED == 4
+    int blind_3_actual_position;
+    int blind_3_requested_position;
+    int blind_3_absolute_zero;
+    bool blind_3_moving;
+#endif
 
 extern PubSubClient mqttClient;
 extern String device_name;
 extern Blind Blinds[NUMBER_OF_BLINDS_SUPPORTED];
+extern Preferences flash;
 static const char* TAG = "Hardware";
 
-void Blinds_Init(){
-
-	
-}
 
 String get_device_name(){
 	uint8_t baseMac[6];
@@ -23,9 +45,12 @@ String get_device_name(){
 	return String(baseMacChr);
 }
 
-void blinds_down(){
-	ESP_LOGD("Blinds Down");
+void blinds_down(uint8_t blind_id=0){
+	ESP_LOGD(TAG, "Blind %d Down", blind_id);
 
+
+
+	//Sending confirmation via MQTT
 	String first = String(DEVICE_SEND);
 	if(first.length() < 2){
 		first += first.charAt(0);
@@ -44,11 +69,18 @@ void blinds_down(){
 
 	String message = first + second + third + fourth;
 	mqttClient.publish("0001", message.c_str());
+	//End of COnfirmation
 }
 
-void blinds_up(){
-	ESP_LOGD("Blinds Up");
+void blinds_up(uint8_t blind_id=0){
+	ESP_LOGD(TAG, "Blind %d Up", blind_id);
 
+	//Activating Motors and changing direction
+	digitalWrite(MOTOR_0_PIN_A, ACTIVATED);
+	digitalWrite(MOTOR_0_PIN_B, DEACTIVATED);
+	//End of Activating Motors and changing direction
+
+	//MQTT Confirmation Publish
 	String first = String(DEVICE_SEND);
 	if(first.length() < 2){
 		first += first.charAt(0);
@@ -63,15 +95,53 @@ void blinds_up(){
 		third[0] = '0';
 	}
 
-	String fourth = "00";
+	String fourth = "0" + String(blind_id);
 
-	String message = first + second + third + fourth;
-	mqttClient.publish("0001", message.c_str());
+	String fifth = "00";
+
+	if(blind_id == 0){
+		fifth = String(blind_0_actual_position);
+		if(fifth.length() < 2){
+			fifth += first.charAt(0);
+			fifth[0] = '0';
+		}
+	}
+	#if NUMBER_OF_BLINDS_SUPPORTED >= 2
+	if(blind_id == 1){
+		String fifth = String(blind_1_actual_position);
+		if(fifth.length() < 2){
+			fifth += first.charAt(0);
+			fifth[0] = '0';
+		}
+	}
+	#endif
+	#if NUMBER_OF_BLINDS_SUPPORTED >= 3
+	if(blind_id == 2){
+		String fifth = String(blind_2_actual_position);
+		if(fifth.length() < 2){
+			fifth += first.charAt(0);
+			fifth[0] = '0';
+		}
+	}
+	#endif
+	#if NUMBER_OF_BLINDS_SUPPORTED == 4
+	if(blind_id == 3){
+		String fifth = String(blind_3_actual_position);
+		if(fifth.length() < 2){
+			fifth += first.charAt(0);
+			fifth[0] = '0';
+		}
+	}
+	#endif
+
+	String message = first + second + third + fourth + fifth;
+	mqttClient.publish("0002", message.c_str());
+	//End of MQTT Confirmation Publish
 
 }
 
-void blinds_stop(){
-	ESP_LOGD("Blinds Stop");
+void blinds_stop(uint8_t blind_id=0){
+	ESP_LOGD(TAG, "Blind %d Stopped", blind_id);
 
 	String first = String(DEVICE_SEND);
 	if(first.length() < 2){
@@ -94,3 +164,39 @@ void blinds_stop(){
 	
 }
 
+void activate_hardware(){
+	ESP_LOGD(TAG, "Initializing the Hardware");
+
+	pinMode(MOTOR_0_PIN_A, OUTPUT);
+	pinMode(MOTOR_0_PIN_B, OUTPUT);
+	ESP_LOGD(TAG, "Motor 1 Initialized");
+
+	flash.begin("blinds");
+	blind_0_requested_position = flash.getInt("0_last_position", 0);
+	flash.end();
+
+	//Nota -> Transformar esse trecho de código em Função Paralela (Thread)
+	const TickType_t xDelay = 1 / portTICK_PERIOD_MS;
+
+	//Reseting Blinds 0 Position to 0
+	blinds_up(0);
+
+	while(digitalRead(REED_SWITCH_0 != DEACTIVATED)){
+		vTaskDelay(xDelay);
+	}
+	blinds_stop(0);
+	blind_0_actual_position = 0;
+	ESP_LOGD(TAG, "Motor 1 0 Position Set by Reedswitch");
+	//End of Reseting Blinds 0 Position to 0
+
+	#if NUMBER_OF_BLINDS_SUPPORTED >= 2
+		
+	#endif
+	#if NUMBER_OF_BLINDS_SUPPORTED >= 3
+		
+	#endif
+	#if NUMBER_OF_BLINDS_SUPPORTED == 4
+		
+	#endif
+
+}

@@ -23,6 +23,7 @@ static const char* TAG = "Connections";
 
 void wifi_connect(){
     try{
+        flash.begin("config");
         WiFi.begin(ssid.c_str(), pass.c_str());
         ESP_LOGD(TAG, "Connecting to WiFi");
         const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
@@ -39,6 +40,7 @@ void wifi_connect(){
         }
         if(WiFi.status() != WL_CONNECTED){
             ESP_LOGE(TAG, "Connection failed after %d attemps.", attemps);
+            flash.end();
             throw network_connection_error();
         }else{
             WIFI_CONNECTION_STATUS = CONNECTED;
@@ -46,11 +48,11 @@ void wifi_connect(){
             flash.putString("wifi_ssid", ssid);
             flash.putString("wifi_password", pass);
             ESP_LOGD(TAG, "WiFi Credentials has been written in memory");
+            flash.end();
         }
     }catch(std::exception& e){
         WIFI_CONNECTION_STATUS = NOT_READY;
         ESP_LOGE(TAG, "Network Connection Error -> Throwing Exception.");
-        
         throw e;
     }
 }
@@ -72,6 +74,7 @@ IPAddress activate_internal_wifi(){
 
 bool mqtt_connect(){
     try{
+        flash.begin("config");
         if(WIFI_CONNECTION_STATUS == CONNECTED){
             mqttClient.setServer(mqtt_server_ip.c_str(), mqtt_server_port);
             String name = "Persiana " + device_name;
@@ -87,8 +90,10 @@ bool mqtt_connect(){
             flash.putString("mqtt_ip", mqtt_server_ip);
             flash.putInt("mqtt_port", mqtt_server_port);
             ESP_LOGD(TAG, "MQTT Credentials has been written in memory");
+            flash.end();
         }else{
             MQTT_CONNECTION_STATUS == NOT_READY;
+            flash.end();
             throw mqtt_connection_error();
         }
     }

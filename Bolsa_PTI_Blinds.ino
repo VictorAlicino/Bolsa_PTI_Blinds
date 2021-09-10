@@ -51,6 +51,8 @@ void setup(){
         flash.putString("device_name", device_name);
         ESP_LOGD(TAG, "Device Name: %s", device_name);
 
+        flash.end();
+
         //Ativando Web Server
         IPAddress IP = activate_internal_wifi();
         startup_server();
@@ -93,6 +95,11 @@ void setup(){
         WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
         WiFi.setHostname(name.c_str());
         ESP_LOGD(TAG, "Device Name: %s", device_name);
+
+        flash.end();
+
+        //Ativando Pinos
+        activate_hardware();
         
         //Definindo credenciais de conexão
         ssid = flash.getString("wifi_ssid", "");
