@@ -34,3 +34,6 @@
 ArduinoOutput/
 .vscode/
 vscode/
+
+# MacOS Files
+*.DS_Store
